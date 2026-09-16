@@ -90,7 +90,7 @@ def download_summitslist():
 
 
 def main():
-    download_summitslist()
+    #download_summitslist()
 
     activators = get_activators()
     print(f"Found {len(activators)} activators with 13cm (2.3GHz) activity")
