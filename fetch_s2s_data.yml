@@ -1,0 +1,36 @@
+name: Fetch SOTA microwave S2S data
+
+on:
+  schedule:
+    # 03:17 UTC every night - off the hour to avoid load spikes on shared runners/APIs
+    - cron: "17 3 * * *"
+  workflow_dispatch: {}  # allows manual "Run workflow" trigger too
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run fetch script
+        run: python fetch_data.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/s2s_microwave.json summitslist.csv
+          git diff --cached --quiet || git commit -m "Nightly S2S data refresh"
+          git push
