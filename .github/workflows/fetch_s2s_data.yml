@@ -31,6 +31,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/s2s_microwave.json summitslist.csv
+          git add data/s2s_microwave.json
           git diff --cached --quiet || git commit -m "Nightly S2S data refresh"
           git push
